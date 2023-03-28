@@ -78,18 +78,17 @@ client.on(Events.InteractionCreate, async interaction => {
 			console.log(lastInteractionTime)
 			lastInteractionUser = interaction.user.id
 
-			var db;
+			var db = mongoClient.db(process.env.db);
 			var collection;
 			var query;
 			var dmMessage;
 			
 			if(interaction.message.guild){
-				db = mongoClient.db(process.env.db)
 				collection = db.collection(process.env.collection)
 				query = { guildid: interaction.member.guild.id }
 				dmMessage = false
 			} else {
-				db = mongoClient.db(process.env.personalcatdb)
+				
 				collection = db.collection(process.env.personalcatcollection)
 				query = { userid: interaction.user.id }
 				dmMessage = await client.channels.fetch(interaction.channelId)
@@ -121,11 +120,9 @@ client.on(Events.InteractionCreate, async interaction => {
 		var db
 		var collection
 		if(interaction.message.guild){
-			db = mongoClient.db(process.env.db)
         	collection = db.collection(process.env.collection)
 			query = { guildid: interaction.member.guild.id }
 		} else {
-			db = mongoClient.db(process.env.personalcatdb)
 			collection = db.collection(process.env.personalcatcollection)
 			query = { userid: interaction.user.id }
 		}

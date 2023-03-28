@@ -12,7 +12,7 @@ module.exports = {
     async execute(interaction, client, mongoClient) {
 
         if(!interaction.guild){
-            const perdb = mongoClient.db(process.env.personalcatdb)
+            const perdb = mongoClient.db(process.env.db)
             var percollection = perdb.collection(process.env.approveduserscollection)
             var perquery = { userid: interaction.user.id }
             var user = (await percollection.distinct("userid", perquery)).toString()

@@ -33,7 +33,7 @@ module.exports = {
                 .setDescription('Integer value for the attribute (use string for 0 or decimal values)'),
         ),
     async execute(interaction, client, mongoClient) {
-        const perdb = mongoClient.db(process.env.personalcatdb)
+        const perdb = mongoClient.db(process.env.db)
         const percollection = perdb.collection(process.env.personalcatcollection)
 
         const db = mongoClient.db(process.env.db)
