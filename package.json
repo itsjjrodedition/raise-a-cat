@@ -1,0 +1,26 @@
+{
+  "name": "raise-a-cat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node deploy-commands.js && node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/J-dotjs/raise-a-cat.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/J-dotjs/raise-a-cat/issues"
+  },
+  "homepage": "https://github.com/J-dotjs/raise-a-cat#readme",
+  "dependencies": {
+    "discord.js": "^14.7.1",
+    "dotenv": "^16.0.3",
+    "moment": "^2.29.4",
+    "mongodb": "^5.0.1",
+    "webhook-discord": "^3.7.8"
+  }
+}
