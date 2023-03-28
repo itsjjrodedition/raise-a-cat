@@ -22,7 +22,7 @@ module.exports = {
               .setDescription('The member to add/revoke')
               .setRequired(true)),
     async execute(interaction, client, mongoClient) {
-        const db = mongoClient.db(process.env.personalcatdb)
+        const db = mongoClient.db(process.env.db)
         const collection = db.collection(process.env.approveduserscollection)
         const query = { userid: interaction.options.getUser('user').id };
         var user = (await collection.distinct("userid", query)).toString()
