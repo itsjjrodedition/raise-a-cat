@@ -14,7 +14,7 @@ async function execute(collection, query, interaction) {
     var lastInteraction = (await collection.distinct("lastInteraction", query)).toString()
     var lastInteractionTime = (await collection.distinct("lastInteractionTime", query)).toString()
     var lastInteractionUser = (await collection.distinct("lastInteractionUser", query)).toString()
-    var embedColor = (await collection.distinct("color", query)).toString() || "0x0099FF"
+    var embedColor = (await collection.distinct("color", query)).toString() || "#0099FF"
     
     if(lastInteraction === 'play'){
         lastInteraction = `played with \`${catName}\``
