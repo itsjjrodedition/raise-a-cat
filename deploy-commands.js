@@ -4,9 +4,13 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const commands = [];
+const guildCommands = [];
 // Grab all the command files from the commands directory you created earlier
 const foldersPath = path.join(__dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath);
+
+const guildFoldersPath = path.join(__dirname, 'guildCommands');
+const guildCommandFolders = fs.readdirSync(guildFoldersPath);
 
 for (const folder of commandFolders) {
 	// Grab all the command files from the commands directory you created earlier
@@ -18,6 +22,22 @@ for (const folder of commandFolders) {
 		const command = require(filePath);
 		if ('data' in command && 'execute' in command) {
 			commands.push(command.data.toJSON());
+		} else {
+			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+		}
+	}
+}
+
+for (const folder of guildCommandFolders) {
+	// Grab all the command files from the commands directory you created earlier
+	const commandsPath = path.join(guildFoldersPath, folder);
+	const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+	// Grab the SlashCommandBuilder#toJSON() output of each command's data for deployment
+	for (const file of commandFiles) {
+		const filePath = path.join(commandsPath, file);
+		const guildCommand = require(filePath);
+		if ('data' in guildCommand && 'execute' in guildCommand) {
+			guildCommands.push(guildCommand.data.toJSON());
 		} else {
 			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
 		}
@@ -39,6 +59,16 @@ const rest = new REST().setToken(process.env.token);
 		);
 
 		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+
+		console.log(`Started refreshing ${guildCommands.length} guild (/) commands.`);
+
+		const guildData = await rest.put(
+			Routes.applicationGuildCommands(process.env.clientId, process.env.guildId),
+			{ body: guildCommands },
+		);
+
+		console.log(`Successfully reloaded ${guildData.length} guild (/) commands.`);
+
 	} catch (error) {
 		// And of course, make sure you catch and log any errors!
 		console.error(error);
