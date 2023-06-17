@@ -18,9 +18,9 @@
   "homepage": "https://github.com/J-dotjs/raise-a-cat#readme",
   "dependencies": {
     "discord.js": "^14.11.0",
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.3.0",
     "moment": "^2.29.4",
-    "mongodb": "^5.0.1",
+    "mongodb": "^5.6.0",
     "webhook-discord": "^3.7.8"
   }
 }
