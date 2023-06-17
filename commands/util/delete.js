@@ -2,8 +2,8 @@ const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 require('dotenv').config()
 
-const audit = require('../functions/audit.js')
-const resetCat = require('../functions/resetCat.js')
+const audit = require('../../functions/audit.js')
+const resetCat = require('../../functions/resetCat.js')
 
 module.exports = {
     data: new SlashCommandBuilder()
