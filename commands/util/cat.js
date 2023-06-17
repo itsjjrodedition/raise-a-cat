@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 
 require('dotenv').config()
 
-const catShowCreate = require('../functions/createCat.js')
+const catShowCreate = require('../../functions/createCat.js')
 
 module.exports = {
     data: new SlashCommandBuilder()

@@ -2,7 +2,7 @@ const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 require('dotenv').config()
 
-const changeValue = require('../functions/changeValue.js')
+const changeValue = require('../../functions/changeValue.js')
 
 module.exports = {
     data: new SlashCommandBuilder()

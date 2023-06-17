@@ -1,52 +1,76 @@
 const { REST, Routes } = require('discord.js');
 require('dotenv').config()
 const fs = require('node:fs');
+const path = require('node:path');
 
-const globalCommands = [];
-const globalCommandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-const officialCommands = [];
-const officialCommandFiles = fs.readdirSync('./officialcommands').filter(file => file.endsWith('.js'));
+const commands = [];
+const guildCommands = [];
+// Grab all the command files from the commands directory you created earlier
+const foldersPath = path.join(__dirname, 'commands');
+const commandFolders = fs.readdirSync(foldersPath);
 
-for (const file of globalCommandFiles) {
-	const command = require(`./commands/${file}`);
-	globalCommands.push(command.data.toJSON());
+const guildFoldersPath = path.join(__dirname, 'guildCommands');
+const guildCommandFolders = fs.readdirSync(guildFoldersPath);
+
+for (const folder of commandFolders) {
+	// Grab all the command files from the commands directory you created earlier
+	const commandsPath = path.join(foldersPath, folder);
+	const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+	// Grab the SlashCommandBuilder#toJSON() output of each command's data for deployment
+	for (const file of commandFiles) {
+		const filePath = path.join(commandsPath, file);
+		const command = require(filePath);
+		if ('data' in command && 'execute' in command) {
+			commands.push(command.data.toJSON());
+		} else {
+			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+		}
+	}
 }
 
-for (const file of officialCommandFiles) {
-	const command = require(`./officialcommands/${file}`);
-	officialCommands.push(command.data.toJSON());
+for (const folder of guildCommandFolders) {
+	// Grab all the command files from the commands directory you created earlier
+	const commandsPath = path.join(guildFoldersPath, folder);
+	const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+	// Grab the SlashCommandBuilder#toJSON() output of each command's data for deployment
+	for (const file of commandFiles) {
+		const filePath = path.join(commandsPath, file);
+		const guildCommand = require(filePath);
+		if ('data' in guildCommand && 'execute' in guildCommand) {
+			guildCommands.push(guildCommand.data.toJSON());
+		} else {
+			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+		}
+	}
 }
 
-const rest = new REST({ version: '10' }).setToken(process.env.token);
+// Construct and prepare an instance of the REST module
+const rest = new REST().setToken(process.env.token);
 
+// and deploy your commands!
 (async () => {
 	try {
-		console.log(`Started refreshing ${globalCommands.length} global (/) command(s).`);
-
-		const globaldata = await rest.put(
+		console.log(`Started refreshing ${commands.length} application (/) commands.`);
+		
+		// The put method is used to fully refresh all commands in the guild with the current set
+		const data = await rest.put(
 			Routes.applicationCommands(process.env.clientId),
-			{ body: globalCommands },
+			{ body: commands },
 		);
 
-		console.log(`Successfully reloaded ${globaldata.length} global (/) command(s).`);
+		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
 
-		console.log(`Started refreshing ${officialCommands.length} official guild (/) command(s).`);
+		console.log(`Started refreshing ${guildCommands.length} guild (/) commands.`);
 
-		const officialdata = await rest.put(
-			Routes.applicationGuildCommands(process.env.clientId, process.env.officialguildid),
-			{ body: officialCommands },
+		const guildData = await rest.put(
+			Routes.applicationGuildCommands(process.env.clientId, process.env.guildId),
+			{ body: guildCommands },
 		);
 
-		console.log(`Successfully reloaded ${officialdata.length} official guild (/) command(s).`);
-        if(process.env.privateguildid){
-			const privateguilddata = await rest.put(
-				Routes.applicationGuildCommands(process.env.clientId, process.env.privateguildid),
-				{ body: officialCommands },
-			);
+		console.log(`Successfully reloaded ${guildData.length} guild (/) commands.`);
 
-			console.log(`Successfully reloaded ${privateguilddata.length} private guild (/) command(s).`);
-        }
 	} catch (error) {
+		// And of course, make sure you catch and log any errors!
 		console.error(error);
 	}
 })();

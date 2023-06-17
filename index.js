@@ -4,8 +4,6 @@ const { Client, Collection, Events, GatewayIntentBits, Role } = require('discord
 require('dotenv').config()
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const mongoClient = new MongoClient(process.env.mongodburi, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-const wait = require('node:timers/promises').setTimeout;
-const moment = require('moment');
 
 const changeValue = require("./functions/changeValue.js");
 const refresh = require("./functions/refreshMessage.js");
@@ -20,21 +18,18 @@ var lastInteractionUser;
 const client = new Client( { intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.DirectMessages, GatewayIntentBits.MessageContent], ws: { properties: { browser: 'Discord' } }, });
 
 client.commands = new Collection();
-const commandsPath = path.join(__dirname, 'commands');
-const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
-const officialCommandsPath = path.join(__dirname, 'officialcommands');
-const officialCommandFiles = fs.readdirSync(officialCommandsPath).filter(file => file.endsWith('.js'));
+const foldersPath = path.join(__dirname, 'commands');
+const commandFolders = fs.readdirSync(foldersPath);
 
-for (const file of commandFiles) {
-	const filePath = path.join(commandsPath, file);
-	const command = require(filePath);
-	client.commands.set(command.data.name, command);
-}
+for (const folder of commandFolders) {
+	const commandsPath = path.join(foldersPath, folder);
+	const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
-for (const file of officialCommandFiles) {
-	const filePath = path.join(officialCommandsPath, file);
-	const command = require(filePath);
-	client.commands.set(command.data.name, command);
+	for (const file of commandFiles) {
+		const filePath = path.join(commandsPath, file);
+		const command = require(filePath);
+		client.commands.set(command.data.name, command);
+	}
 }
 
 client.once(Events.ClientReady, async () => {
