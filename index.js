@@ -69,7 +69,7 @@ client.on(Events.InteractionCreate, async interaction => {
 			}
 			interaction.deferReply({ ephemeral: true })
 			lastInteraction = interaction.customId
-			lastInteractionTime = Date.parse(interaction.createdAt)/1000
+			lastInteractionTime = Math.round(Date.parse(interaction.createdAt)/1000)
 			console.log(lastInteractionTime)
 			lastInteractionUser = interaction.user.id
 

@@ -17,15 +17,15 @@ async function execute(collection, query, interaction) {
     var embedColor = (await collection.distinct("color", query)).toString() || "#0099FF"
     
     if(lastInteraction === 'play'){
-        lastInteraction = `played with \`${catName}\``
+        lastInteraction = `\`Play\``
     } else if(lastInteraction === 'pet'){
-        lastInteraction = `pat \`${catName}\``
+        lastInteraction = `\`Pet\``
     } else if(lastInteraction === 'feed'){
-        lastInteraction = `fed \`${catName}\``
+        lastInteraction = `\`Fed\``
     } else if(lastInteraction === 'water'){
-        lastInteraction = `gave water to \`${catName}\``
+        lastInteraction = `\`Gave water\``
     } else if(lastInteraction === 'clean'){
-        lastInteraction = `cleaned \`${catName}\``
+        lastInteraction = `\`Clean\``
     } 
 
     const buttons1 = new ActionRowBuilder()
@@ -136,7 +136,7 @@ async function execute(collection, query, interaction) {
         }
 
         if(lastInteraction){
-            catDisplayEmbed.setDescription(`<@${lastInteractionUser}> ${lastInteraction} <t:${lastInteractionTime}:R>`)
+            catDisplayEmbed.setDescription(`Last interacted: <@${lastInteractionUser}> [${lastInteraction}]\n<t:${lastInteractionTime}:R>`)
         }
 
     return { catDisplayEmbed, buttons1, buttons2, buttons3, catName, age, hunger, thirst, rest, bladder, mood, cleanliness, disabledButtons1, disabledButtons2, disabledButtons3 }
