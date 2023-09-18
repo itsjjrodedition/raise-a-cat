@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require('discord.js');
+const { SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const mongoClient = new MongoClient(process.env.mongodburi, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
@@ -14,40 +14,35 @@ module.exports = {
         
         await mongoClient.connect().then(async () => {
             console.log('Connected to MongoDB');
+
+            if(!interaction.guild){
+                return
+            } else{
+                const query = { guild: interaction.guild.id }
+                const db = mongoClient.db(process.env.db)
+                const collection = db.collection(process.env.collection)
+    
+                const cat = await collection.findOne(query)
+    
+                if(!cat) return chooseCat(interaction)
+    
+            }
         })
-
-        if(!interaction.guild){
-            return
-        } else{
-            const query = { guild: interaction.guild.id }
-            const db = mongoClient.db(process.env.db)
-            const collection = db.collection('cats')
-
-            const cat = await collection.findOne(query)
-
-            if(!cat) createCat(db, collection, interaction)
-
-            return interaction.reply(cat)
-        }
-
-        await mongoClient.close();
+        
     },
 };
 
-async function createCat(db, collection, interaction) {
-    interaction.reply('Creating cat...', { ephemeral: true });
-    const modal = new ModalBuilder()
-        .setCustomId('catMaker')
-        .setTitle('Create a cat!');
-        
-    const nameInput = new TextInputBuilder()
-        .setCustomId('name')
-        .setLabel('Name:')
-        .setStyle(TextInputStyle.Short)
-        .setPlaceholder('Enter your cat\'s name!')
-        .setRequired(true);
+async function chooseCat(interaction) {
+    const shelter = new EmbedBuilder()
+        .setTitle('Choose a cat!')
+        .setImage('https://i.imgur.com/5QHrYk8.png');
 
-    const actionRow = new ActionRowBuilder().addComponents(nameInput);
-    modal.addComponents(actionRow);
-    await interaction.showModal(modal);
+    const beginButton = new ButtonBuilder()
+        .setCustomId('begin')
+        .setLabel('Begin!')
+        .setStyle(ButtonStyle.Primary);
+
+    const beginButtonRow = new ActionRowBuilder().addComponents(beginButton);
+
+    await interaction.reply({ embeds: [shelter], components: [beginButtonRow] });
 }
