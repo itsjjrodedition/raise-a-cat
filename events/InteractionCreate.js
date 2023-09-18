@@ -4,6 +4,8 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const { ignoreRoot } = require('nodemon/lib/config/defaults');
 const mongoClient = new MongoClient(process.env.mongodburi, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
+const colorConverter = require('@j-dotjs/color-code-converter');
+
 const nameCat = require(process.cwd() + "/functions/nameCat.js");
 
 module.exports = {
@@ -175,9 +177,11 @@ module.exports = {
 					}
 					}).then(async () => {
 						const license = new EmbedBuilder()
-							.setTitle('Certificate of Adoption')
+							.setTitle('𝒞𝑒𝓇𝓉𝒾𝒻𝒾𝒸𝒶𝓉𝑒  𝑜𝒻  𝒜𝒹𝑜𝓅𝓉𝒾𝑜𝓃')
+							.setColor(colorConverter.getHexStr("blue"))
 							.setThumbnail('https://cdn.discordapp.com/attachments/1153154274822467715/1153156391612203078/IMG_1484.png')
-							.setDescription(`Congratulations on adopting your new cat \`${interaction.fields.getTextInputValue('name')}\`!`)
+							.setDescription(`Congratulations on adopting your new cat \`${interaction.fields.getTextInputValue('name')}\`!\n
+							\`${interaction.fields.getTextInputValue('name')}\` is waiting for you! Run </cat:1068277148181340170> again to display your new cat!`)
 
 						await interaction.editReply({ embeds: [license], ephemeral: false })
 					})
