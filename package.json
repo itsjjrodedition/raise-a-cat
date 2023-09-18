@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@j-dotjs/color-code-converter": "^0.0.7",
     "discord.js": "^14.13.0",
     "dotenv": "^16.3.1",
     "mongodb": "^5.7.0",
