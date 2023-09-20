@@ -193,9 +193,8 @@ module.exports = {
 						const license = new EmbedBuilder()
 							.setTitle('𝒞𝑒𝓇𝓉𝒾𝒻𝒾𝒸𝒶𝓉𝑒  𝑜𝒻  𝒜𝒹𝑜𝓅𝓉𝒾𝑜𝓃')
 							.setColor(colorConverter.getHexStr("blue"))
-							.setThumbnail('https://cdn.discordapp.com/attachments/1153154274822467715/1153156391612203078/IMG_1484.png')
-							.setDescription(`Congratulations on adopting your new cat \`${interaction.fields.getTextInputValue('name')}\`!\n
-							\`${interaction.fields.getTextInputValue('name')}\` is waiting for you! Run </cat:1068277148181340170> again to display your new cat!`)
+							.setThumbnail('https://cdn.discordapp.com/attachments/1153154274822467715/1153186773644611674/IMG_1489.png')
+							.setDescription(`Congratulations on adopting your new cat \`${interaction.fields.getTextInputValue('name')}\`!\n\n\`${interaction.fields.getTextInputValue('name')}\` is waiting for you! Run </cat:1068277148181340170> again to display your new cat!`)
 
 						await interaction.editReply({ embeds: [license], ephemeral: false })
 					})
