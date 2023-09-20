@@ -7,6 +7,7 @@ const mongoClient = new MongoClient(process.env.mongodburi, { useNewUrlParser: t
 const colorConverter = require('@j-dotjs/color-code-converter');
 
 const nameCat = require(process.cwd() + "/functions/nameCat.js");
+const stats = require(process.cwd() + "/functions/stats.js");
 
 module.exports = {
 	name: Events.InteractionCreate,
@@ -158,7 +159,15 @@ module.exports = {
 						nameCat.execute(interaction);
 					})
 				}
-			}		
+			}
+			if(interaction.customId === 'refresh')
+			{
+				
+			}
+			if(interaction.customId === 'stats')
+			{
+				stats.execute(interaction);
+			}
 		}
 
 		if(interaction.isModalSubmit())
@@ -173,7 +182,12 @@ module.exports = {
 
 					collection.updateOne(query, {
 						$set: {
-							name: interaction.fields.getTextInputValue('name')
+							name: interaction.fields.getTextInputValue('name'),
+							hunger: 100,
+							thirst: 100,
+							hygiene: 100,
+							energy: 100,
+							level: 1,
 					}
 					}).then(async () => {
 						const license = new EmbedBuilder()

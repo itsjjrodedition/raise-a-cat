@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { SlashCommandBuilder, ActionRowBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const mongoClient = new MongoClient(process.env.mongodburi, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
@@ -13,7 +13,6 @@ module.exports = {
     async execute(interaction) {
         
         await mongoClient.connect().then(async () => {
-            console.log('Connected to MongoDB');
 
             if(!interaction.guild){
                 return
@@ -25,6 +24,30 @@ module.exports = {
                 const cat = await collection.findOne(query)
     
                 if(!cat) return chooseCat(interaction)
+
+                const catEmbed = new EmbedBuilder()
+                    .setTitle(`${cat.name} [Level ${cat.level}]`)
+                    .setImage("https://i.imgur.com/5QHrYk8.png")
+
+                const statsButton = new ButtonBuilder()
+                    .setCustomId('stats')
+                    .setLabel('Stats')
+                    .setStyle(ButtonStyle.Primary)
+
+                const controlButton = new ButtonBuilder()
+                    .setCustomId('control')
+                    .setLabel('Control')
+                    .setStyle(ButtonStyle.Secondary)
+
+                const refreshButton = new ButtonBuilder()
+                    .setCustomId('refresh')
+                    .setLabel('Refresh')
+                    .setStyle(ButtonStyle.Secondary)
+                    .setEmoji('🔄')
+
+                const catButtonRow = new ActionRowBuilder().addComponents(statsButton, controlButton, refreshButton)
+
+                interaction.reply({ embeds: [catEmbed], components: [catButtonRow] })
     
             }
         })
