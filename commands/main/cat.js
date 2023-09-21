@@ -11,19 +11,19 @@ module.exports = {
         .setDescription('Display or create your cat can be used in DM\'s and Servers!')
         .setDMPermission(true),
     async execute(interaction) {
-        
+
         await mongoClient.connect().then(async () => {
 
-            if(!interaction.guild){
+            if (!interaction.guild) {
                 return
-            } else{
+            } else {
                 const query = { guild: interaction.guild.id }
                 const db = mongoClient.db(process.env.db)
                 const collection = db.collection(process.env.collection)
-    
+
                 const cat = await collection.findOne(query)
-    
-                if(!cat) return chooseCat(interaction)
+
+                if (!cat) return chooseCat(interaction)
 
                 const catEmbed = new EmbedBuilder()
                     .setTitle(`${cat.name} [Level ${cat.level}]`)
@@ -37,21 +37,20 @@ module.exports = {
                 const controlButton = new ButtonBuilder()
                     .setCustomId('control')
                     .setLabel('Control')
-                    .setStyle(ButtonStyle.Secondary)
+                    .setStyle(ButtonStyle.Danger)
 
                 const refreshButton = new ButtonBuilder()
                     .setCustomId('refresh')
-                    .setLabel('Refresh')
                     .setStyle(ButtonStyle.Secondary)
                     .setEmoji('🔄')
 
-                const catButtonRow = new ActionRowBuilder().addComponents(statsButton, controlButton, refreshButton)
+                const catButtonRow = new ActionRowBuilder().addComponents(statsButton, controlButton)
+                const catRefreshButtonRow = new ActionRowBuilder().addComponents(refreshButton)
 
-                interaction.reply({ embeds: [catEmbed], components: [catButtonRow] })
-    
+                interaction.reply({ embeds: [catEmbed], components: [catButtonRow, catRefreshButtonRow] })
             }
         })
-        
+
     },
 };
 

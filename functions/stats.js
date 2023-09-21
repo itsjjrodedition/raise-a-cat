@@ -8,7 +8,7 @@ const colorConverter = require('@j-dotjs/color-code-converter');
 module.exports = {
     name: 'stats',
     execute: async (interaction) => {
-        
+
         mongoClient.connect().then(async () => {
             const query = { guild: interaction.guild.id }
             const db = mongoClient.db(process.env.db)

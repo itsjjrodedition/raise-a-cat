@@ -16,13 +16,11 @@ module.exports = {
 
             const cat = await collection.findOne(query)
 
-            if(cat)
-            {
+            if (cat) {
                 interaction.reply(`\`${cat.name}\` has been surrendered`)
                 collection.deleteOne(query)
-            } 
-            else
-            {
+            }
+            else {
                 interaction.reply('You do not have a cat to surrender')
             }
         })
