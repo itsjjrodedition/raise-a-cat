@@ -1,9 +1,7 @@
-const { SlashCommandBuilder, ActionRowBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { SlashCommandBuilder, ActionRowBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ComponentType } = require('discord.js');
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const mongoClient = new MongoClient(process.env.mongodburi, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-
-require('dotenv').config()
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -17,13 +15,17 @@ module.exports = {
             if (!interaction.guild) {
                 return
             } else {
-                const query = { guild: interaction.guild.id }
+                var query = { name: { $exists: true }}
                 const db = mongoClient.db(process.env.db)
                 const collection = db.collection(process.env.collection)
 
                 const cat = await collection.findOne(query)
 
-                if (!cat) return chooseCat(interaction)
+                if (!cat) {
+                    query = { guild: interaction.guild.id }
+                    collection.deleteOne(query)
+                    return chooseCat(interaction)
+                } 
 
                 const catEmbed = new EmbedBuilder()
                     .setTitle(`${cat.name} [Level ${cat.level}]`)
@@ -34,20 +36,14 @@ module.exports = {
                     .setLabel('Stats')
                     .setStyle(ButtonStyle.Primary)
 
-                const controlButton = new ButtonBuilder()
-                    .setCustomId('control')
-                    .setLabel('Control')
-                    .setStyle(ButtonStyle.Danger)
-
                 const refreshButton = new ButtonBuilder()
                     .setCustomId('refresh')
                     .setStyle(ButtonStyle.Secondary)
                     .setEmoji('🔄')
 
-                const catButtonRow = new ActionRowBuilder().addComponents(statsButton, controlButton)
-                const catRefreshButtonRow = new ActionRowBuilder().addComponents(refreshButton)
+                const catButtonRow = new ActionRowBuilder().addComponents(statsButton, refreshButton)
 
-                interaction.reply({ embeds: [catEmbed], components: [catButtonRow, catRefreshButtonRow] })
+                interaction.reply({ embeds: [catEmbed], components: [catButtonRow] })
             }
         })
 
@@ -55,9 +51,11 @@ module.exports = {
 };
 
 async function chooseCat(interaction) {
-    const shelter = new EmbedBuilder()
+    const shelter = require(process.cwd() + "/functions/shelter.js");
+
+    const shelterEmbed = new EmbedBuilder()
         .setTitle('Choose a cat!')
-        .setImage('https://i.imgur.com/5QHrYk8.png');
+        .setImage('https://i.imgur.com/MywcWi0.png');
 
     const beginButton = new ButtonBuilder()
         .setCustomId('begin')
@@ -66,5 +64,23 @@ async function chooseCat(interaction) {
 
     const beginButtonRow = new ActionRowBuilder().addComponents(beginButton);
 
-    await interaction.reply({ embeds: [shelter], components: [beginButtonRow] });
+    await interaction.reply({ embeds: [shelterEmbed], components: [beginButtonRow], ephemeral: true })
+
+    const buttonCollector = interaction.channel.createMessageComponentCollector({
+        componentType: ComponentType.Button,
+        time: 120000
+    })
+
+    buttonCollector.on('collect', async (interaction) => {
+        if (interaction.customId === 'begin') {
+            await interaction.deferUpdate();
+            buttonCollector.stop();
+        }
+    })
+
+    buttonCollector.on('end', async (collected) => {
+        shelter.execute(interaction);
+        beginButtonRow.components[0].setDisabled(true);
+        interaction.editReply({ components: [beginButtonRow] });
+    })
 }
