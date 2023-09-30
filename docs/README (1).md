@@ -1,5 +1,2 @@
 # Terms of Service
 
-
-
-## WIP
