@@ -3,6 +3,8 @@ const { SlashCommandBuilder, ActionRowBuilder, EmbedBuilder, ButtonBuilder, Butt
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const mongoClient = new MongoClient(process.env.mongodburi, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
+const colorConverter = require('@j-dotjs/color-code-converter');
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('cat')
@@ -29,6 +31,7 @@ module.exports = {
 
                 const catEmbed = new EmbedBuilder()
                     .setTitle(`${cat.name} [Level ${cat.level}]`)
+                    .setColor(colorConverter.getHexStr(`${cat.embedColor}`))
                     .setImage("https://i.imgur.com/5QHrYk8.png")
 
                 const statsButton = new ButtonBuilder()
