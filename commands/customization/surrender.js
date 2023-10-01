@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
@@ -7,6 +7,8 @@ const mongoClient = new MongoClient(process.env.mongodburi, { useNewUrlParser: t
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('surrender')
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+        .setDMPermission(true)
         .setDescription('Surrender your cat :('),
     async execute(interaction) {
         await mongoClient.connect().then(async () => {

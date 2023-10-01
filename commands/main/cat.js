@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ActionRowBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ComponentType } = require('discord.js');
+const { SlashCommandBuilder, ActionRowBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ComponentType, PermissionFlagsBits } = require('discord.js');
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const mongoClient = new MongoClient(process.env.mongodburi, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
@@ -9,6 +9,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('cat')
         .setDescription('Display or create your cat can be used in DM\'s and Servers!')
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .setDMPermission(true),
     async execute(interaction) {
 

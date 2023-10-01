@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const mongoClient = new MongoClient(process.env.mongodburi, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
@@ -7,7 +7,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('color')
         .setDescription('Change the color of your cat embed!')
-
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .addStringOption(option =>
             option.setName('color')
                 .setDescription('The color of your desired cat embed')
