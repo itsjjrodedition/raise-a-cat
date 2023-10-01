@@ -46,7 +46,8 @@ module.exports =
 
         const buttonCollector = interaction.channel.createMessageComponentCollector({
             componentType: ComponentType.Button,
-            time: 300000
+            time: 300000,
+            filter: (i) => i.user.id === interaction.user.id
         })
 
         shelterButtonRow.components[0].setDisabled(true);

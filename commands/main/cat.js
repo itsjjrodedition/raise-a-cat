@@ -59,7 +59,6 @@ async function chooseCat(interaction) {
     const shelter = require(process.cwd() + "/functions/shelter.js");
 
     const shelterEmbed = new EmbedBuilder()
-        .setTitle('Choose a cat!')
         .setImage('https://i.imgur.com/MywcWi0.png');
 
     const beginButton = new ButtonBuilder()
@@ -69,11 +68,12 @@ async function chooseCat(interaction) {
 
     const beginButtonRow = new ActionRowBuilder().addComponents(beginButton);
 
-    await interaction.reply({ embeds: [shelterEmbed], components: [beginButtonRow], ephemeral: true })
+    await interaction.reply({ embeds: [shelterEmbed], components: [beginButtonRow] })
 
     const buttonCollector = interaction.channel.createMessageComponentCollector({
         componentType: ComponentType.Button,
-        time: 120000
+        time: 120000,
+        filter: (i) => i.user.id === interaction.user.id
     })
 
     buttonCollector.on('collect', async (interaction) => {
