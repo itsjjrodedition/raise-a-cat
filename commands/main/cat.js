@@ -15,7 +15,8 @@ module.exports = {
         await mongoClient.connect().then(async () => {
 
             if (!interaction.guild) {
-                return
+                await interaction.deferReply();
+                await interaction.editReply({ content: 'Dm cats are a wip' });
             } else {
                 var query = { name: { $exists: true }}
                 const db = mongoClient.db(process.env.db)
