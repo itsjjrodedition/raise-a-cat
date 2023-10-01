@@ -35,17 +35,18 @@ module.exports = {
                     .setColor(colorConverter.getHexStr(`${cat.embedColor}`))
                     .setImage("https://i.imgur.com/5QHrYk8.png")
 
+                const careButton = new ButtonBuilder()
+                    .setCustomId('care')
+                    .setLabel('Care For')
+                    .setStyle(ButtonStyle.Primary)
+
+
                 const statsButton = new ButtonBuilder()
                     .setCustomId('stats')
                     .setLabel('Stats')
-                    .setStyle(ButtonStyle.Primary)
-
-                const refreshButton = new ButtonBuilder()
-                    .setCustomId('refresh')
                     .setStyle(ButtonStyle.Secondary)
-                    .setEmoji('🔄')
 
-                const catButtonRow = new ActionRowBuilder().addComponents(statsButton, refreshButton)
+                const catButtonRow = new ActionRowBuilder().addComponents(careButton, statsButton)
 
                 interaction.reply({ embeds: [catEmbed], components: [catButtonRow] })
             }
