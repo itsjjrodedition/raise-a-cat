@@ -6,6 +6,7 @@ const mongoClient = new MongoClient(process.env.mongodburi, { useNewUrlParser: t
 const colorConverter = require('@j-dotjs/color-code-converter');
 
 const stats = require(process.cwd() + "/functions/stats.js");
+const care = require(process.cwd() + "/functions/care.js");
 
 module.exports = {
 	name: Events.InteractionCreate,
@@ -27,8 +28,8 @@ module.exports = {
 		}
 
 		if (interaction.isButton()) {
-			if (interaction.customId === 'refresh') {
-
+			if (interaction.customId === 'care') {
+				care.execute(interaction);
 			}
 			if (interaction.customId === 'stats') {
 				stats.execute(interaction);
@@ -53,6 +54,11 @@ module.exports = {
 							energy: 100,
 							level: 1,
 							location: 'livingroom',
+							happiness: 100,
+							bladder: 100,
+							lastInteractionTime: Date.now(),
+							lastInteractionUser: interaction.user.id,
+							lastInteraction: "created cat",
 						}
 					}).then(async () => {
 						const license = new EmbedBuilder()

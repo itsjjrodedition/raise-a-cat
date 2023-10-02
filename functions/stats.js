@@ -17,7 +17,7 @@ module.exports = {
             const catStats = await collection.findOne(query)
 
             const catStatsEmbed = new EmbedBuilder()
-                .setTitle(`${catStats.name} (${catStats.color})`)
+                .setTitle(`${catStats.color}`)
                 .setColor(colorConverter.getHexStr("green"))
 
             const statsNext = new ButtonBuilder()

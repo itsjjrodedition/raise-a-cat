@@ -33,18 +33,19 @@ module.exports = {
 
                 const catEmbed = new EmbedBuilder()
                     .setTitle(`${cat.name} [Level ${cat.level}]`)
+                    .setDescription( `<@${cat.lastInteractionUser}> ${cat.lastInteraction} <t:${Math.floor(cat.lastInteractionTime / 1000)}:R>`)
                     .setColor(colorConverter.getHexStr(`${cat.embedColor}`))
                     .setImage("https://i.imgur.com/5QHrYk8.png")
 
                 const careButton = new ButtonBuilder()
                     .setCustomId('care')
-                    .setLabel('Care For')
+                    .setLabel(`Care for ${cat.name}!`)
                     .setStyle(ButtonStyle.Primary)
 
 
                 const statsButton = new ButtonBuilder()
                     .setCustomId('stats')
-                    .setLabel('Stats')
+                    .setLabel(`${cat.name}\'s Stats`)
                     .setStyle(ButtonStyle.Secondary)
 
                 const catButtonRow = new ActionRowBuilder().addComponents(careButton, statsButton)
