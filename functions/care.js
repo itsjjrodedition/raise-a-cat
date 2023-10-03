@@ -88,27 +88,3 @@ module.exports = {
         })
     }
 }
-
-async function feed(interaction, cat) {
-    mongoClient.connect().then(async () => {
-        const query = { guild: interaction.guild.id }
-        const db = mongoClient.db(process.env.db)
-        const collection = db.collection(process.env.collection)
-
-        const cat = await collection.findOne(query)
-
-        cat.last
-    })
-}
-
-async function water(interaction, cat) {
-    
-}
-
-async function play(interaction, cat) {
-    
-}
-
-async function pet(interaction, cat) {
-    
-}
