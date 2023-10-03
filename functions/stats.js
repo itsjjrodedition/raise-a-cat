@@ -14,10 +14,10 @@ module.exports = {
             const db = mongoClient.db(process.env.db)
             const collection = db.collection(process.env.collection)
 
-            const catStats = await collection.findOne(query)
+            const cat = await collection.findOne(query)
 
             const catStatsEmbed = new EmbedBuilder()
-                .setTitle(`${catStats.color}`)
+                .setTitle(`${cat.color}`)
                 .setColor(colorConverter.getHexStr("green"))
 
             const statsNext = new ButtonBuilder()
@@ -34,10 +34,10 @@ module.exports = {
             statsControls.components[0].setDisabled(true)
 
             catStatsEmbed.setFields([
-                { name: 'Hunger', value: `${catStats.hunger}%`, inline: false },
-                { name: 'Thirst', value: `${catStats.thirst}%`, inline: false },
-                { name: 'Hygiene', value: `${catStats.hygiene}%`, inline: false },
-                { name: 'Energy', value: `${catStats.energy}%`, inline: false },
+                { name: 'Hunger', value: `${cat.stats.hunger}%`, inline: false },
+                { name: 'Thirst', value: `${cat.stats.thirst}%`, inline: false },
+                { name: 'Hygiene', value: `${cat.stats.hygiene}%`, inline: false },
+                { name: 'Energy', value: `${cat.stats.energy}%`, inline: false },
             ])
 
             interaction.reply({ embeds: [catStatsEmbed], components: [statsControls], ephemeral: true }).then(() => {
@@ -64,10 +64,10 @@ module.exports = {
                             statsControls.components[1].setDisabled(false)
 
                             catStatsEmbed.setFields([
-                                { name: 'Hunger', value: `${catStats.hunger}%`, inline: false },
-                                { name: 'Thirst', value: `${catStats.thirst}%`, inline: false },
-                                { name: 'Hygiene', value: `${catStats.hygiene}%`, inline: false },
-                                { name: 'Energy', value: `${catStats.energy}%`, inline: false },
+                                { name: 'Hunger', value: `${cat.stats.hunger}%`, inline: false },
+                                { name: 'Thirst', value: `${cat.stats.thirst}%`, inline: false },
+                                { name: 'Hygiene', value: `${cat.stats.hygiene}%`, inline: false },
+                                { name: 'Energy', value: `${cat.stats.energy}%`, inline: false },
                             ])
                             button.deferUpdate()
                             interaction.editReply({ embeds: [catStatsEmbed], components: [statsControls], ephemeral: true })

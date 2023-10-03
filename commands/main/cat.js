@@ -32,8 +32,8 @@ module.exports = {
                 } 
 
                 const catEmbed = new EmbedBuilder()
-                    .setTitle(`${cat.name} [Level ${cat.level}]`)
-                    .setDescription( `<@${cat.lastInteractionUser}> ${cat.lastInteraction} <t:${Math.floor(cat.lastInteractionTime / 1000)}:R>`)
+                    .setTitle(`${cat.name} [Level ${cat.stats.level}]`)
+                    .setDescription( `<@${cat.lastInteraction.user}> ${cat.lastInteraction.type} <t:${Math.floor(cat.lastInteraction.timestamp / 1000)}:R>`)
                     .setColor(colorConverter.getHexStr(`${cat.embedColor}`))
                     .setImage("https://i.imgur.com/5QHrYk8.png")
 

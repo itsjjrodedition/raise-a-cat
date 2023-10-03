@@ -21,7 +21,7 @@ module.exports = {
 
             const water = new ButtonBuilder()
                 .setCustomId('water')
-                .setLabel(`Refill ${cat.name}\'s water`)
+                .setLabel(`Give ${cat.name} water`)
                 .setStyle(ButtonStyle.Primary)
 
             const play = new ButtonBuilder()
@@ -56,22 +56,59 @@ module.exports = {
                 buttonCollector.on('collect', async (button) => {
                     if (button.user.id === interaction.user.id) {
                         if (button.customId === 'feed') {
-                            await care.feed(interaction, cat)
+                            // await feed(interaction, cat)
+                            buttonCollector.stop()
                         }
                         if (button.customId === 'water') {
-                            await care.water(interaction, cat)
+                            // await water(interaction, cat)
+                            buttonCollector.stop()
                         }
                         if (button.customId === 'play') {
-                            await care.play(interaction, cat)
+                            // await play(interaction, cat)
+                            buttonCollector.stop()
                         }
                         if (button.customId === 'pet') {
-                            await care.pet(interaction, cat)
+                            // await pet(interaction, cat)
+                            buttonCollector.stop()
                         }
                         button.deferUpdate()
                         interaction.editReply({ components: [careControls], ephemeral: true })
                     }
                 })
+
+                buttonCollector.on('end', async (collected) => {
+                    careControls.components[0].setDisabled(true)
+                    careControls.components[1].setDisabled(true)
+                    careControls.components[2].setDisabled(true)
+                    careControls.components[3].setDisabled(true)
+
+                    await interaction.editReply({ components: [careControls], ephemeral: true })
+                })
             })
         })
     }
+}
+
+async function feed(interaction, cat) {
+    mongoClient.connect().then(async () => {
+        const query = { guild: interaction.guild.id }
+        const db = mongoClient.db(process.env.db)
+        const collection = db.collection(process.env.collection)
+
+        const cat = await collection.findOne(query)
+
+        cat.last
+    })
+}
+
+async function water(interaction, cat) {
+    
+}
+
+async function play(interaction, cat) {
+    
+}
+
+async function pet(interaction, cat) {
+    
 }

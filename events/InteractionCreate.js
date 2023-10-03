@@ -48,17 +48,17 @@ module.exports = {
 					collection.updateOne(query, {
 						$set: {
 							name: interaction.fields.getTextInputValue('name'),
-							hunger: 100,
-							thirst: 100,
-							hygiene: 100,
-							energy: 100,
-							level: 1,
+							stats: {
+								level: 1,
+								hunger: 100,
+								thirst: 100,
+								hygiene: 100,
+								energy: 100,
+								happiness: 100,
+								bladder: 100,
+							},
 							location: 'livingroom',
-							happiness: 100,
-							bladder: 100,
-							lastInteractionTime: Date.now(),
-							lastInteractionUser: interaction.user.id,
-							lastInteraction: "created cat",
+							lastInteraction: { "type": "created cat", "timestamp": Date.now(), "user": interaction.user.id },
 						}
 					}).then(async () => {
 						const license = new EmbedBuilder()
