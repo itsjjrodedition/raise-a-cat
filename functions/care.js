@@ -16,12 +16,12 @@ module.exports = {
 
             const feed = new ButtonBuilder()
                 .setCustomId('feed')
-                .setLabel(`Feed ${cat.name}!`)
+                .setLabel(`Feed ${cat.name}`)
                 .setStyle(ButtonStyle.Success)
 
             const water = new ButtonBuilder()
                 .setCustomId('water')
-                .setLabel(`Give ${cat.name} a drink!`)
+                .setLabel(`Refill ${cat.name}\'s water`)
                 .setStyle(ButtonStyle.Primary)
 
             const play = new ButtonBuilder()
@@ -37,6 +37,12 @@ module.exports = {
             if(cat.location === 'livingroom') {
                 feed.setDisabled(true)
                 water.setDisabled(true)
+            } else if(cat.location === 'kitchen') {
+                play.setDisabled(true)
+                pet.setDisabled(true)
+            } else if(cat.location === 'bedroom') {
+                water.setDisabled(true)
+                feed.setDisabled(true)
             }
 
             const careControls = new ActionRowBuilder().addComponents(feed, water, play, pet)
