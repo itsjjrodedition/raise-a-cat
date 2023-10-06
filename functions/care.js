@@ -3,6 +3,11 @@ const { ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentType } = require(
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const mongoClient = new MongoClient(process.env.mongodburi, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
+const playFunction = require('./CareFunctions/play.js');
+const feedFunction = require('./CareFunctions/feed.js');
+const waterFunction = require('./CareFunctions/water.js');
+const petFunction = require('./CareFunctions/pet.js');
+
 module.exports = {
     name: 'care',
     execute: async (interaction) => {
@@ -56,19 +61,19 @@ module.exports = {
                 buttonCollector.on('collect', async (button) => {
                     if (button.user.id === interaction.user.id) {
                         if (button.customId === 'feed') {
-                            // await feed(interaction, cat)
+                            await feedFunction.execute(interaction, cat)
                             buttonCollector.stop()
                         }
                         if (button.customId === 'water') {
-                            // await water(interaction, cat)
+                            await waterFunction.execute(interaction, cat)
                             buttonCollector.stop()
                         }
                         if (button.customId === 'play') {
-                            // await play(interaction, cat)
+                            await playFunction.execute(interaction, cat)
                             buttonCollector.stop()
                         }
                         if (button.customId === 'pet') {
-                            // await pet(interaction, cat)
+                            await petFunction.execute(interaction, cat)
                             buttonCollector.stop()
                         }
                         button.deferUpdate()
