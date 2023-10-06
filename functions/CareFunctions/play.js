@@ -1,7 +1,7 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const mongoClient = new MongoClient(process.env.mongodburi, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
-const countdown = require('@j-dotjs/countdown-library');
+const qol = require('qol-date-functions');
 
 module.exports = {
     name: 'play',
@@ -12,10 +12,10 @@ module.exports = {
             const collection = db.collection(process.env.collection)
 
             var time = new Date();
-            var nextDay = countdown.addSeconds(time, 5);
+            var nextDay = qol.addSeconds(time, 5);
 
-            time = countdown.toUnix(time)
-            nextDay = countdown.toUnix(nextDay)
+            time = qol.toUnix(time)
+            nextDay = qol.toUnix(nextDay)
             
 
             interaction.followUp({ content: `<t:${time}:R> | <t:${nextDay}:R>`, ephemeral: true })
